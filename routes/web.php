@@ -17,20 +17,21 @@ Route::get('/', function () {
     return view('inicio');
 });
 
-Route::get('/create-entries', function () {
-    return view('form');
-});
 
-Route::post('/entries', function (Request $request) {
-    $response = Http::post('http://tu-servicio-rest/api/entries', [
-        'title' => $request->input('title'),
-        'author' => $request->input('author'),
-        'publication_date' => $request->input('publication_date'),
-        'content' => $request->input('content'),
-    ]);
+// Route::get('/create-entries', function () {
+//     return view('form');
+// });
 
-    return redirect('/entries');
-});
+// Route::post('/entries', function (Request $request) {
+//     $response = Http::post('http://tu-servicio-rest/api/entries', [
+//         'title' => $request->input('title'),
+//         'author' => $request->input('author'),
+//         'publication_date' => $request->input('publication_date'),
+//         'content' => $request->input('content'),
+//     ]);
+
+//     return redirect('/entries');
+// });
 
 /* Route::get('/', 'EntryController@index');
 Route::get('/entries', 'EntryController@index')->name('entries.index');
