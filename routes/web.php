@@ -17,7 +17,7 @@ Route::get('/', function () {
     return view('inicio');
 });
 
-
+//
 // Route::get('/create-entries', function () {
 //     return view('form');
 // });
