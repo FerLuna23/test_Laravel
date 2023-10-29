@@ -7,6 +7,7 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="Free HTML Templates" name="keywords">
     <meta content="Free HTML Templates" name="description">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- Favicon -->
     <link href="img/favicon.ico" rel="icon">
@@ -32,7 +33,7 @@
         <div class="row align-items-center py-2 px-lg-5">
             <div class="col-lg-4">
                 <a href="" class="navbar-brand d-none d-lg-block">
-                    <h1 class="m-0 display-5 text-uppercase"><span class="text-primary">News</span>Room</h1>
+                    <h1 class="m-0 display-5 text-uppercase"><span class="text-primary">Prueba</span>Laravel</h1>
                 </a>
             </div>
         </div>
@@ -43,7 +44,7 @@
     <div class="container-fluid p-0 mb-3">
         <nav class="navbar navbar-expand-lg bg-light navbar-light py-2 py-lg-0 px-lg-5">
             <a href="" class="navbar-brand d-block d-lg-none">
-                <h1 class="m-0 display-5 text-uppercase"><span class="text-primary">News</span>Room</h1>
+                <h1 class="m-0 display-5 text-uppercase"><span class="text-primary">Prueba</span>Laravel</h1>
             </a>
             <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
                 <span class="navbar-toggler-icon"></span>
@@ -66,8 +67,37 @@
                 <div class="col-md-12">
                     <div class="contact-form bg-light mb-3" style="padding: 30px;">
                         <div id="success"></div>
-                        <form action="{{ url('/entries') }}" name="sentMessage" id="contactForm" novalidate="novalidate" method="post">
+                        <form action="{{ route('register') }}" name="" id="" novalidate="novalidate" method="post">
+                            {{ csrf_field() }}
                             <div class="form-row">
+                                <?php $datos = session('datos'); ?>
+                                @if( isset($datos) )
+                                    @if( $datos->estatus != 0 )
+                                        <div class="col-md-12">
+                                            <div class="alert alert-success">
+                                                <ul>
+                                                    <li>{{ $datos->mensaje }}</li>
+                                                </ul>
+                                            </div>
+                                        </div> 
+                                    @else
+                                        <div class="col-md-12">
+                                            <div class="alert alert-danger">
+                                            <ul>
+                                                    @if( is_object($datos->mensaje) )
+                                                        @foreach ($datos->mensaje as $campo => $mensajes)
+                                                            @foreach ($mensajes as $mensaje)
+                                                                <li>{{ $mensaje }}</li>
+                                                            @endforeach
+                                                        @endforeach
+                                                    @else
+                                                        <li>{{ $datos->mensaje }}</li>
+                                                    @endif
+                                                </ul>
+                                            </div>
+                                        </div> 
+                                    @endif
+                                @endif
                                 <div class="col-md-12">
                                     <label for="title"><strong>Titulo</strong><b style="color: red;">*</b></label>
                                     <input type="text" class="form-control p-4" id="title" name="title" required="required"/>

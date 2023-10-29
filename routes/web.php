@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,33 +15,34 @@ use Illuminate\Support\Facades\Http;
 | contains the "web" middleware group. Now create something great!|
 */
 
+
 Route::get('/', function () {
-    return view('inicio');
-});
+    $response = Http::withoutVerifying()->get('https://aplicaciones.setab.gob.mx/api_laravel_tres/public/api/getEntries');
+    $entries = $response->json();
+    return view('inicio', compact('entries'));
+}); 
 
 Route::get('/create-entries', function () {
     return view('form');
+})->name('create_entries');
+
+Route::get('/single-entry/{id}', function ($id) {
+    $response = Http::withoutVerifying()->get("https://aplicaciones.setab.gob.mx/api_laravel_tres/public/api/getEntry/$id");
+    $entry = $response->json();
+
+    return view('single', compact('entry'));
 });
 
 Route::post('/entries', function (Request $request) {
-    $response = Http::post('http://tu-servicio-rest/api/entries', [
-        'title' => $request->input('title'),
-        'author' => $request->input('author'),
-        'publication_date' => $request->input('publication_date'),
-        'content' => $request->input('content'),
+    $response = Http::withoutVerifying()->post('https://aplicaciones.setab.gob.mx/api_laravel_tres/public/api/register', [
+        'titulo' => $request->input('title'),
+        'autor' => $request->input('author'),
+        'fecha_publicacion' => $request->input('publication_date'),
+        'contenido' => $request->input('content')
     ]);
 
-    return redirect('/entries');
-});
+    $response = json_decode($response);
 
-/* Route::get('/', 'EntryController@index');
-Route::get('/entries', 'EntryController@index')->name('entries.index');
-Route::get('/entries/create', 'EntryController@create')->name('entries.create');
-Route::post('/entries', 'EntryController@store')->name('entries.store');
+    return Redirect::route('create_entries')->with('datos', $response);
+})->name('register');
 
-
-Route::get('/entries', function () {
-    $response = Http::get('http://tu-servicio-rest/api/entries');
-    $entries = $response->json();
-    return view('entries.index', compact('entries'));
-});*/ 
